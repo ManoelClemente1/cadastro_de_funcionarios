@@ -19,13 +19,28 @@ public class StudentsService {
         return "salvo com sucesso";
     }
 
-    public StudentEntity getStudentById(Long id){
-        Optional<StudentEntity> student = studentRepository.findById(id);
-        return student.get();
+    public Optional<StudentEntity> getStudentById(Long studentId){
+        Optional<StudentEntity> student = studentRepository.findById(studentId);
+        return student;
     }
 
     public List<StudentEntity> getStudents(){
         return studentRepository.findAll();
     }
 
+    public void deleteStudentById(Long studentId){
+        studentRepository.deleteById(studentId);
+    }
+
+    public void createOrUpdateStudent(Long studentId, String name, String email){
+        Optional<StudentEntity> student = studentRepository.findById(studentId);
+        if(student.isPresent()){
+            StudentEntity updated_student = new StudentEntity(studentId, name, email);
+            studentRepository.save(updated_student);
+        } else {
+            StudentEntity new_student = new StudentEntity(name,email);
+            studentRepository.save(new_student);
+        }
+
+    }
 }
